@@ -12,6 +12,10 @@ for (File file : sdkHandler.sdkLoader.repositories) {
   }
 }
 
+jar {
+  baseName = 'persistable-generator-compiler'
+}
+
 dependencies {
   compile project(':persistable-generator-annotations')
   compile deps.auto.common
@@ -30,4 +34,4 @@ checkstyle {
   sourceSets = [sourceSets.main]
 }
 
-apply from: rootProject.file('gradle-mvn-push.gradle')
+apply from: 'bintray.gradle'

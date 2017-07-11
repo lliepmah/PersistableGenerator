@@ -14,4 +14,8 @@ import com.lliepmah.persistablegenerator.PersistableModel;
   public InternalModel(String internalProperty) {
     this.internalProperty = internalProperty;
   }
+
+  @Override public InternalModelPersistable toPersistable() {
+    return new InternalModelPersistable(this);
+  }
 }
