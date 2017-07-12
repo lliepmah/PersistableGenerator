@@ -215,6 +215,8 @@ import static javax.lang.model.element.Modifier.STATIC;
         propertyName = propertyName + "." + Methods.COPY + "()";
       }
 
+      // TODO: 12.07.17 copy Lists and Lists with copyable
+
       builder.addStatement("$T $L = $L.$L", mirror, variableName, Fields.MODEL, propertyName);
     }
 
