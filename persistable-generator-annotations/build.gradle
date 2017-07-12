@@ -2,7 +2,6 @@ import com.android.build.gradle.internal.LoggerWrapper
 import com.android.build.gradle.internal.SdkHandler
 
 apply plugin: 'java'
-//apply plugin: 'checkstyle'
 
 def logger = new LoggerWrapper(project.logger)
 def sdkHandler = new SdkHandler(project, logger)
@@ -21,7 +20,6 @@ jar {
 
 
 dependencies {
-//  compileOnly deps.android
-//  compile deps.supportAnnotations
 }
+
 apply from: 'bintray.gradle'
