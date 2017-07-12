@@ -43,22 +43,28 @@ Library generates wrapper class `SomeModelPersistable` implements `Persistable` 
 ```
 
 
-##Integration
+## Integration
+
 ```groovy
+def persistableGeneratorVersion = 'x.x.x'
+...
 dependencies {
+  provided "com.github.lliepmah:persistable-generator-annotations:$persistableGeneratorVersion"
+  annotationProcessor "com.github.lliepmah:persistable-generator-compiler:$persistableGeneratorVersion"
   ...
-  provided 'com.github.lliepmah:persistable-generator-annotations:0.1.1'
-  annotationProcessor 'com.github.lliepmah:persistable-generator-compiler:0.1.1'
 }
 ```
 
 
-###Kotlin
+### Kotlin
+
 ```groovy
+def persistableGeneratorVersion = 'x.x.x'
+
 dependencies {
+  provided "com.github.lliepmah:persistable-generator-annotations:$persistableGeneratorVersion"
+  kapt "com.github.lliepmah:persistable-generator-compiler:$persistableGeneratorVersion"
   ...
-  provided 'com.github.lliepmah:persistable-generator-annotations:0.1.1'
-  kapt 'com.github.lliepmah:persistable-generator-compiler:0.1.1'
 }
 ```
 
