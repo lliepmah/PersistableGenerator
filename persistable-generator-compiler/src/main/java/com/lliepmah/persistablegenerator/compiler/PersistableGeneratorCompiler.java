@@ -55,46 +55,45 @@ import static javax.lang.model.element.Modifier.STATIC;
 
   public static final ClassName LIST_CLASSNAME = ClassName.get(List.class);
   public static final ClassName STRING_CLASSNAME = ClassName.get("java.lang", "String");
-  public static final ClassName DATA_OUTPUT_CLASSNAME =
+
+  private static final ClassName DATA_OUTPUT_CLASSNAME =
       ClassName.get("com.ironz.binaryprefs.serialization.serializer.persistable.io", "DataOutput");
-  public static final ClassName DATA_INPUT_CLASSNAME =
+  private static final ClassName DATA_INPUT_CLASSNAME =
       ClassName.get("com.ironz.binaryprefs.serialization.serializer.persistable.io", "DataInput");
-  public static final ClassName PERSISTABLE_CLASSNAME =
+  private static final ClassName PERSISTABLE_CLASSNAME =
       ClassName.get("com.ironz.binaryprefs.serialization.serializer.persistable", "Persistable");
 
-  //public static final ClassName PERSISTABLE_MODEL_CLASSNAME =
-  //    ClassName.get("com.lliepmah.persistablegenerator", "PersistableModel");
-
   public static final String POSTFIX_PERSISTABLE = "Persistable";
-  public static final String FIELD_NAME_MODEL = "mModel";
+  private static final String FIELD_NAME_MODEL = "mModel";
 
-  private Elements elementUtils;
-  private Types typeUtils;
-  private Filer filer;
-  private Trees trees;
+  private Elements mElements;
+  private Types mTypes;
+  private Filer mFiler;
+  private Trees mTrees;
 
   private List<? extends CodeBlockWriter> mWriteExternalWritersChain;
   private List<? extends CodeBlockWriter> mReadExternalWritersChain;
 
   @Override public synchronized void init(ProcessingEnvironment env) {
     super.init(env);
-    elementUtils = env.getElementUtils();
-    typeUtils = env.getTypeUtils();
-    filer = env.getFiler();
+    mElements = env.getElementUtils();
+    mTypes = env.getTypeUtils();
+    mFiler = env.getFiler();
     try {
-      trees = Trees.instance(processingEnv);
+      mTrees = Trees.instance(processingEnv);
     } catch (IllegalArgumentException ignored) {
     }
 
     PrimitiveWriter primitiveWriter = new PrimitiveWriter();
-    PersistableWriter persistableWriter = new PersistableWriter(elementUtils);
+    PersistableWriter persistableWriter = new PersistableWriter(mElements);
     mWriteExternalWritersChain = Arrays.asList(primitiveWriter, persistableWriter,
-        new ListWriter(primitiveWriter, persistableWriter, typeUtils, elementUtils));
+        new ListWriter(primitiveWriter, persistableWriter, mTypes, mElements));
 
     ReadPrimitiveWriter readPrimitiveWriter = new ReadPrimitiveWriter();
-    ReadPersistableWriter readPersistableWriter = new ReadPersistableWriter(elementUtils);
+    ReadPersistableWriter readPersistableWriter = new ReadPersistableWriter(mElements);
     mReadExternalWritersChain = Arrays.asList(readPrimitiveWriter, readPersistableWriter,
-        new ReadListWriter(readPrimitiveWriter, readPersistableWriter, typeUtils, elementUtils, env.getMessager()));
+        new ReadListWriter(readPrimitiveWriter, readPersistableWriter, mTypes, mElements,
+            env.getMessager()));
   }
 
   @Override public boolean process(Set<? extends TypeElement> set, RoundEnvironment env) {
@@ -102,7 +101,7 @@ import static javax.lang.model.element.Modifier.STATIC;
 
       try {
         JavaFile javaFile = brewJava((TypeElement) element);
-        javaFile.writeTo(filer);
+        javaFile.writeTo(mFiler);
       } catch (Exception e) {
         logParsingError(element, PersistableGenerator.class, e);
       }
@@ -128,7 +127,7 @@ import static javax.lang.model.element.Modifier.STATIC;
     result.addSuperinterface(PERSISTABLE_CLASSNAME);
     result.addField(ClassName.get(typeElement), FIELD_NAME_MODEL, PRIVATE);
 
-    List<? extends Element> members = elementUtils.getAllMembers(typeElement);
+    List<? extends Element> members = mElements.getAllMembers(typeElement);
 
     final List<VariableElement> fieldElements = new ArrayList<>();
     final List<ExecutableElement> methodElements = new ArrayList<>();
@@ -153,7 +152,10 @@ import static javax.lang.model.element.Modifier.STATIC;
           }
 
           if (propertyName != null) {
-            add(new Property(propertyName, type));
+            add(new Property(field, propertyName, type));
+          } else {
+            error(field, "Field %1$s is private and haven't getter",
+                field.getSimpleName().toString());
           }
         }
       }
@@ -164,7 +166,7 @@ import static javax.lang.model.element.Modifier.STATIC;
     result.addMethod(createWriteExternalMethod(properties));
     result.addMethod(createReadExternalMethod());
     result.addMethod(createBuildMethod(bindingClassName, properties));
-    result.addMethod(createDeepCloneMethod(fieldElements));
+    result.addMethod(createDeepCloneMethod(bindingClassName, properties));
 
     return result.build();
   }
@@ -193,15 +195,25 @@ import static javax.lang.model.element.Modifier.STATIC;
         .addParameter(DATA_OUTPUT_CLASSNAME, "out");
 
     for (Property property : properties) {
-      for (CodeBlockWriter codeBlockWriter : mWriteExternalWritersChain) {
-        if (codeBlockWriter.write(property.getTypeMirror(),
-            FIELD_NAME_MODEL + "." + property.getName(), builder)) {
-          break;
-        }
+      if (!appendWriteExternalMethod(builder, property)) {
+        error(property.getField(), "Can't generate code for class %1$s",
+            property.getTypeMirror().toString());
       }
     }
-
     return builder.build();
+  }
+
+  /**
+   * @return true if can create method
+   */
+  private boolean appendWriteExternalMethod(MethodSpec.Builder builder, Property property) {
+    for (CodeBlockWriter codeBlockWriter : mWriteExternalWritersChain) {
+      if (codeBlockWriter.write(property.getTypeMirror(),
+          FIELD_NAME_MODEL + "." + property.getName(), builder)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private MethodSpec createBuildMethod(TypeName typeName, List<Property> properties) {
@@ -237,21 +249,30 @@ import static javax.lang.model.element.Modifier.STATIC;
         .build();
   }
 
-  private MethodSpec createDeepCloneMethod(List<VariableElement> fields) {
+  private MethodSpec createDeepCloneMethod(TypeName typeName, List<Property> properties) {
 
     MethodSpec.Builder builder = MethodSpec.methodBuilder("deepClone")
         .addAnnotation(Override.class)
         .addModifiers(PUBLIC)
         .returns(PERSISTABLE_CLASSNAME);
 
-    for (VariableElement var : fields) {
-      builder.addStatement("String name"
-          + var.getSimpleName().toString()
-          + " = \""
-          + var.getSimpleName().toString()
-          + "\"");
+    builder.addStatement("if(" + FIELD_NAME_MODEL + "==null) return null");
+
+    List<String> variables = new LinkedList<>();
+    for (Property property : properties) {
+      String variableName = "val_" + properties.indexOf(property);
+      variables.add(variableName);
+      builder.addStatement("$T $L = $L.$L", property.getTypeMirror(), variableName,
+          FIELD_NAME_MODEL, property.getName());
     }
-    builder.addStatement("return null");
+
+    TypeElement typeElement = mElements.getTypeElement(typeName.toString());
+    ClassName persistableModelClassName =
+        ClassName.get(mElements.getPackageOf(typeElement).toString(),
+            typeElement.getSimpleName() + POSTFIX_PERSISTABLE);
+
+    builder.addStatement("return new $T(new $T($L))", persistableModelClassName, typeName,
+        TextUtils.join(",", variables));
 
     return builder.build();
   }

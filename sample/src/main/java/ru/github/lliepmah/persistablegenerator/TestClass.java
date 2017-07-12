@@ -10,7 +10,6 @@ import ru.github.lliepmah.persistablegenerator.internal.InternalModel;
  */
 @PersistableGenerator class TestClass {
 
-  private String field1;
   private int field2;
 
   String field3;
@@ -24,9 +23,6 @@ import ru.github.lliepmah.persistablegenerator.internal.InternalModel;
   InternalModel field8;
 
   List<Integer> field9;
-
-  Object myObject;
-  Activity myActivity;
 
   private List<Character> field10;
 

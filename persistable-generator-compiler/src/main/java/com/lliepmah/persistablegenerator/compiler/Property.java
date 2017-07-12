@@ -1,5 +1,6 @@
 package com.lliepmah.persistablegenerator.compiler;
 
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 /**
@@ -10,10 +11,16 @@ public final class Property {
 
   private final String mName;
   private final TypeMirror mTypeMirror;
+  private final VariableElement mField;
 
-  public Property(String name, TypeMirror typeMirror) {
+  public Property(VariableElement field, String name, TypeMirror typeMirror) {
     mName = name;
     mTypeMirror = typeMirror;
+    mField = field;
+  }
+
+  public VariableElement getField() {
+    return mField;
   }
 
   public String getName() {
