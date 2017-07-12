@@ -13,6 +13,9 @@ All you need is to annotate the data class by the annotation `@PersistableGenera
 
 ## Sample
 
+
+#### Java
+
 ```java
 @PersistableGenerator public class SomeModel {
   int age;
@@ -34,6 +37,13 @@ All you need is to annotate the data class by the annotation `@PersistableGenera
     return age;
   }
 }
+```
+
+#### Kotlin
+
+```kotlin
+@PersistableGenerator
+data class SomeModel(val name: String, val age: Int, val someList: List<OtherModel>, val someInts: List<Int>, val someStrings: List<String>)
 ```
 
 Library generates wrapper class `SomeModelPersistable` implements `Persistable` and you can use it next way:
