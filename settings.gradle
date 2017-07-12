@@ -2,5 +2,3 @@ include ':sample'
 
 include ':persistable-generator-annotations'
 include ':persistable-generator-compiler'
-
-include ':persistable-generator-lint'
