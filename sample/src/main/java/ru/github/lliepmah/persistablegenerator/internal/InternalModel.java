@@ -13,4 +13,8 @@ import com.lliepmah.persistablegenerator.PersistableGenerator;
   public InternalModel(String internalProperty) {
     this.internalProperty = internalProperty;
   }
+
+  public InternalModel copy() {
+    return new InternalModel(internalProperty);
+  }
 }

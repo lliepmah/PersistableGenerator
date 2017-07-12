@@ -1,4 +1,4 @@
-package com.lliepmah.persistablegenerator.compiler;
+package com.lliepmah.persistablegenerator.compiler.entity;
 
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;

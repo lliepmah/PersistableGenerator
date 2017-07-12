@@ -1,11 +1,12 @@
 package com.lliepmah.persistablegenerator.compiler.writers;
 
+import com.lliepmah.persistablegenerator.compiler.names.Classes;
+import com.lliepmah.persistablegenerator.compiler.names.Methods;
+import com.lliepmah.persistablegenerator.compiler.names.Variables;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-
-import static com.lliepmah.persistablegenerator.compiler.PersistableGeneratorCompiler.STRING_CLASSNAME;
 
 /**
  * @author Arthur Korchagin on 11.07.17.
@@ -36,7 +37,7 @@ public class ReadPrimitiveWriter implements CodeBlockWriter {
       case DOUBLE:
         return "Double";
     }
-    if (STRING_CLASSNAME.equals(ClassName.get(type))) {
+    if (Classes.STRING.equals(ClassName.get(type))) {
       return "String";
     }
     return null;
@@ -46,7 +47,8 @@ public class ReadPrimitiveWriter implements CodeBlockWriter {
     String primitiveName = getPrimitiveName(type);
     boolean isPrimitive = primitiveName != null;
     if (isPrimitive) {
-      builder.addStatement("$T " + name + " = input.read" + primitiveName + "()", type);
+      builder.addStatement("$T $L = $L.$L$L()", type, name, Variables.INPUT, Methods.READ_PREFIX,
+          primitiveName);
     }
     return isPrimitive;
   }

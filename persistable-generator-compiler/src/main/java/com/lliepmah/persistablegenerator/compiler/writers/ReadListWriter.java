@@ -1,6 +1,7 @@
 package com.lliepmah.persistablegenerator.compiler.writers;
 
 import com.lliepmah.persistablegenerator.PersistableGenerator;
+import com.lliepmah.persistablegenerator.compiler.names.Classes;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -15,8 +16,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
-import static com.lliepmah.persistablegenerator.compiler.PersistableGeneratorCompiler.LIST_CLASSNAME;
-import static com.lliepmah.persistablegenerator.compiler.PersistableGeneratorCompiler.STRING_CLASSNAME;
 import static com.lliepmah.persistablegenerator.compiler.utils.TypeUtils.getPrimitiveTypeKind;
 
 /**
@@ -57,7 +56,7 @@ public class ReadListWriter implements CodeBlockWriter {
     ClassName className = parameterizedTypeName.rawType;
     List<TypeName> typeArguments = parameterizedTypeName.typeArguments;
 
-    if (className.equals(LIST_CLASSNAME) && typeArguments != null && typeArguments.size() == 1) {
+    if (className.equals(Classes.LIST) && typeArguments != null && typeArguments.size() == 1) {
       TypeName typeArgumentName = typeArguments.get(0);
       TypeElement typeElement = mElementUtils.getTypeElement(typeArgumentName.toString());
 
@@ -98,6 +97,6 @@ public class ReadListWriter implements CodeBlockWriter {
   }
 
   private boolean checkPrimitive(TypeName typeName) {
-    return typeName.isBoxedPrimitive() || typeName.equals(STRING_CLASSNAME);
+    return typeName.isBoxedPrimitive() || typeName.equals(Classes.STRING);
   }
 }
