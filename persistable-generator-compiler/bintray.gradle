@@ -67,7 +67,7 @@ bintray {
     publish = true
     pkg {
         repo = 'com.github.lliepmah'
-        name = 'universal-adapter-compiler'
+        name = 'persistable-generator-compiler'
         userOrg = user
         licenses = ['Apache-2.0']
         version {
