@@ -2,14 +2,13 @@ package ru.github.lliepmah.persistablegenerator;
 
 import android.app.Activity;
 import com.lliepmah.persistablegenerator.PersistableGenerator;
-import com.lliepmah.persistablegenerator.PersistableModel;
 import java.util.List;
 import ru.github.lliepmah.persistablegenerator.internal.InternalModel;
 
 /**
  * @author Arthur Korchagin on 11.07.17.
  */
-@PersistableGenerator class TestClass implements PersistableModel {
+@PersistableGenerator class TestClass {
 
   private String field1;
   private int field2;

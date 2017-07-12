@@ -1,12 +1,13 @@
 package ru.github.lliepmah.persistablegenerator;
 
 import com.lliepmah.persistablegenerator.PersistableGenerator;
-import com.lliepmah.persistablegenerator.PersistableModel;
 
-/**ModelCar
+/**
+ * ModelCar
+ *
  * @author Arthur Korchagin on 11.07.17.
  */
-@PersistableGenerator class ModelCar implements PersistableModel {
+@PersistableGenerator class ModelCar {
 
   String carName;
   int elegibleName;

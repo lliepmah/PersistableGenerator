@@ -1,21 +1,16 @@
 package ru.github.lliepmah.persistablegenerator.internal;
 
 import com.lliepmah.persistablegenerator.PersistableGenerator;
-import com.lliepmah.persistablegenerator.PersistableModel;
 
 /**
  * @author Arthur Korchagin on 11.07.17.
  */
 
-@PersistableGenerator public class InternalModel implements PersistableModel {
+@PersistableGenerator public class InternalModel {
 
   String internalProperty;
 
   public InternalModel(String internalProperty) {
     this.internalProperty = internalProperty;
-  }
-
-  @Override public InternalModelPersistable toPersistable() {
-    return new InternalModelPersistable(this);
   }
 }

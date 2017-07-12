@@ -23,7 +23,7 @@ dependencies {
   //  compile deps.release.runtime
   //  annotationProcessor deps.release.compiler
 
-  compile project(':persistable-generator-library')
+  compile project(':persistable-generator-annotations')
   annotationProcessor project(':persistable-generator-compiler')
 
   compile "com.github.iamironz:binaryprefs:0.9.8"

@@ -1,6 +1,5 @@
 include ':sample'
 
-include ':persistable-generator-library'
 include ':persistable-generator-annotations'
 include ':persistable-generator-compiler'
 
