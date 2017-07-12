@@ -2,12 +2,12 @@
 
 [ ![Download](https://api.bintray.com/packages/lliepmah/com.github.lliepmah/persistable-generator-compiler/images/download.svg) ](https://bintray.com/lliepmah/com.github.lliepmah/persistable-generator-compiler/_latestVersion)
 
-A tool for generating Android Persistable implementation.
+A tool for generating [Persistable](https://github.com/iamironz/binaryprefs/blob/master/library/src/main/java/com/ironz/binaryprefs/serialization/serializer/persistable/Persistable.java) implementation.
 
-Created specially for [binaryprefs](https://github.com/iamironz/binaryprefs)
+Created specially for [Binaryprefs](https://github.com/iamironz/binaryprefs)
 
 
-PersistableGenerator generates generates the Persistable wrapper for data classes to get rid of boilerplate source code.
+PersistableGenerator generates the Persistable wrapper for data classes to get rid of boilerplate source code.
 
 All you need is to annotate the data class by the annotation `@PersistableGenerator`
 
