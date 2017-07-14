@@ -12,6 +12,7 @@ public interface Methods {
 
   String COPY = "copy";
   String BUILD = "build";
+  String GET_MODEL = "getModel";
 
   Object WRITE_PREFIX = "write";
   Object READ_PREFIX = "read";

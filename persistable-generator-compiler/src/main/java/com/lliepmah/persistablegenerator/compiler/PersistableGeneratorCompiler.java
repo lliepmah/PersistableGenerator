@@ -114,6 +114,7 @@ import static javax.lang.model.element.Modifier.STATIC;
         .addSuperinterface(Classes.PERSISTABLE)
         .addField(ClassName.get(typeElement), Fields.MODEL, PRIVATE)
         .addMethod(createEmptyConstructor())
+        .addMethod(createModelGetter(bindingClassName))
         .addMethod(createConstructor(typeElement))
         .addMethod(createWriteExternalMethod(properties))
         .addMethod(createReadExternalMethod())
@@ -132,6 +133,14 @@ import static javax.lang.model.element.Modifier.STATIC;
         .addModifiers(PUBLIC)
         .addParameter(ClassName.get(typeElement), Variables.MODEL)
         .addStatement("$L = $L", Fields.MODEL, Variables.MODEL)
+        .build();
+  }
+
+  private MethodSpec createModelGetter(ClassName className) {
+    return MethodSpec.methodBuilder(Methods.GET_MODEL)
+        .returns(className)
+        .addModifiers(PUBLIC)
+        .addStatement("return $L", Fields.MODEL)
         .build();
   }
 
