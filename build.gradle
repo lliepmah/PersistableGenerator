@@ -36,10 +36,11 @@ buildscript {
 
     jcenterGroup = 'com.github.lliepmah'
     gitHubUrl = 'https://github.com/lliepmah/PersistableGenerator'
-    libraryVersionCode = (System.getenv('TRAVIS_BUILD_NUMBER') ?: 1).toInteger()
+    libraryVersionCode = 2
     majorVersion = 0
     minorVersion = 1
-    libraryVersion = "$majorVersion.$minorVersion.$libraryVersionCode"
+    libraryVersion =
+        "$majorVersion.$minorVersion.$libraryVersionCode-SNAPSHOT${System.getenv('TRAVIS_BUILD_NUMBER') ?: ""}"
   }
 }
 
