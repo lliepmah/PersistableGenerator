@@ -2,6 +2,8 @@
 
 [ ![Download](https://api.bintray.com/packages/lliepmah/com.github.lliepmah/persistable-generator-compiler/images/download.svg) ](https://bintray.com/lliepmah/com.github.lliepmah/persistable-generator-compiler/_latestVersion)
 
+[![codebeat badge](https://codebeat.co/badges/5958aa0d-4db5-48d6-9dde-19bdfea2448c)](https://codebeat.co/projects/github-com-lliepmah-persistablegenerator-master)
+
 A tool for generating [Persistable](https://github.com/iamironz/binaryprefs/blob/master/library/src/main/java/com/ironz/binaryprefs/serialization/serializer/persistable/Persistable.java) implementation.
 
 Created specially for [Binaryprefs](https://github.com/iamironz/binaryprefs)
