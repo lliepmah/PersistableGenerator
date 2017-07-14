@@ -36,7 +36,7 @@ buildscript {
 
     jcenterGroup = 'com.github.lliepmah'
     gitHubUrl = 'https://github.com/lliepmah/PersistableGenerator'
-    libraryVersionCode = 2
+    libraryVersionCode = 3
     majorVersion = 0
     minorVersion = 1
     libraryVersion =
